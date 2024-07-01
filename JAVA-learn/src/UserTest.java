@@ -2,8 +2,8 @@ import java.util.Random;
 
 public class UserTest {
     public static void main(String[] args){
-        User u1 = new User("Beating",2000,5,30);
-        User u2 = new User("Japan",5000,2,20);
+        User u1 = new User("wsy",20000,5,5);
+        User u2 = new User("Japan",5000,20,20);
         Random r = new Random();
         int round = 1;
         while(true){
