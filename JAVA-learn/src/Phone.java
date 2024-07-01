@@ -35,4 +35,17 @@ public class Phone {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    @Override
+    public String toString() {
+        return "Phone{" +
+                "brand='" + brand + '\'' +
+                ", color='" + color + '\'' +
+                ", price=" + price +
+                '}';
+    }
+    public void printInfo(){
+        String info = this.toString();
+        System.out.println(info);
+    }
 }
