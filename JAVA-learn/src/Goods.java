@@ -2,12 +2,12 @@ public class Goods {
     private String id;
     private String name;
     private double price;
-    private double capacity;
+    private int capacity;
 
     public Goods() {
     }
 
-    public Goods(String id, String name, double price, double capacity) {
+    public Goods(String id, String name, double price, int capacity) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -26,7 +26,7 @@ public class Goods {
         this.price = price;
     }
 
-    public void setCapacity(double capacity) {
+    public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
 
@@ -42,7 +42,7 @@ public class Goods {
         return price;
     }
 
-    public double getCapacity() {
+    public int getCapacity() {
         return capacity;
     }
 
