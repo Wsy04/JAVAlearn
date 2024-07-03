@@ -1,5 +1,5 @@
 package String;
-//字符串形式的非负整数相乘,结果也用字符串表示
+//字符串形式的整数相乘,结果也用字符串表示
 public class StringMultiple {
     public static void main(String[] args) {
         String a = "-114514";
