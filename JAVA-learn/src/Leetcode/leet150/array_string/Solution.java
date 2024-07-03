@@ -1,17 +1,21 @@
 package Leetcode.leet150.array_string;
 
+import java.util.HashMap;
+
 public class Solution {
     public static void main(String[] args){
-        int[] nums1 = {1,1,2};
+//        int[] nums1 = {1,1,2};
 //        int[] nums2 = {2,5,6};
 //        int m = 0;
 //        int n = 3;
+        String s = "MCMXCIV";
+        System.out.println(romanToInt(s));
 //        merge(nums1,m,nums2,n);
 //        for (int j : nums1) {
 //            System.out.print(j + " ");
 //        }
 //        System.out.println(removeElement(nums1,m));
-        System.out.println(removeDuplicates(nums1));
+//        System.out.println(removeDuplicates(nums1));
     }
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
         int i = m-1,j = n-1;
@@ -45,5 +49,36 @@ public class Solution {
         }
         return k+1;
     }
+    public static int romanToInt(String s) {
+        int res = 0;
+        int curInt;
+        int preInt = getValue(s.charAt(0));
+        for (int i = 1; i < s.length(); i++) {
+            curInt = getValue(s.charAt(i));
+            if(curInt>preInt){
+                res-=preInt;
+            }
+            else
+                res+=preInt;
+            preInt = curInt;
+        }
+        res+=preInt;
+        return res;
+
+
+    }
+    private static int getValue(char ch) {
+        return switch (ch) {
+            case 'I' -> 1;
+            case 'V' -> 5;
+            case 'X' -> 10;
+            case 'L' -> 50;
+            case 'C' -> 100;
+            case 'D' -> 500;
+            case 'M' -> 1000;
+            default -> 0;
+        };
+    }
+
 
 }
