@@ -21,6 +21,7 @@ public class UserTest {
                 break;
             }
             else if(round>=20) System.out.println("二位已经战斗了"+round+"回合,实力不分伯仲");
+            else if(round>=50) System.out.println("历经"+round+"轮战斗"+"二位至尊打到大道都磨灭了");
             round++;
         }
 
