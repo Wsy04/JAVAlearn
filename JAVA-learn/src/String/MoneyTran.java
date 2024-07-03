@@ -1,7 +1,7 @@
 package String;
 
 import java.util.Scanner;
-
+//将输入的一千万以内的数字转变为银行惯用的金额字符串形式
 public class MoneyTran {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);

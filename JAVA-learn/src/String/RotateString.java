@@ -1,5 +1,5 @@
 package String;
-
+//判断一个字符经过若干次循环移位能否成为另一个字符串
 public class RotateString {
     public static void main(String[] args) {
         String A = "adsjoi";

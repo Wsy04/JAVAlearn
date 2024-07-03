@@ -1,7 +1,7 @@
 package String;
 
 import java.util.Random;
-
+//生成指定位数的随机验证码,包含一位位置随机的数字,其他字符为大写或小写的英文字母
 public class GenerateRandomCode {
     public static void main(String[] args) {
         System.out.println(generate(5));

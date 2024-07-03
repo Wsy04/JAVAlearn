@@ -1,7 +1,7 @@
 package String;
 
 import java.util.Random;
-
+//将字符串打乱
 public class DiffuseString {
     public static void main(String[] args) {
         String str = "1145141919810";

@@ -1,7 +1,7 @@
 package String;
 
 import java.util.Scanner;
-
+//打印字符串中的大写字母,小写字母,以及数字字符
 public class CountLetter {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);

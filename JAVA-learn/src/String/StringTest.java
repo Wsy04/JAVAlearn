@@ -1,7 +1,7 @@
 package String;
 
 import java.util.Scanner;
-
+//模拟用户登录,键盘输入用户名和密码
 public class StringTest {
     public static void main(String[] args){
         String username = "wsy";
