@@ -1,3 +1,5 @@
+package JavaPrim;
+
 public class RunoobTest {
     public static void main(String[] args) {
         Nums a = new Nums(10);

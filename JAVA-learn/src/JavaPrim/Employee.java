@@ -1,10 +1,12 @@
+package JavaPrim;
+
 public class Employee{
     String name;
     int age;
     String designation;
     double salary;
     String location;
-    // Employee 类的构造器
+    // JavaPrim.Employee 类的构造器
     public Employee(String name){
         this.name = name;
     }

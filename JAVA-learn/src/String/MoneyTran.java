@@ -1,3 +1,5 @@
+package String;
+
 import java.util.Scanner;
 
 public class MoneyTran {
@@ -22,6 +24,5 @@ public class MoneyTran {
             str.reverse();
             System.out.println(str);
         }
-
     }
 }

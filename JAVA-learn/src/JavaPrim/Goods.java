@@ -1,3 +1,5 @@
+package JavaPrim;
+
 public class Goods {
     private String id;
     private String name;

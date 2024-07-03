@@ -1,3 +1,5 @@
+package JavaPrim;
+
 import java.util.*;
 
 public class Test {

@@ -1,3 +1,5 @@
+package JavaPrim;
+
 public class Nums {
     int num;
     public Nums(int num){

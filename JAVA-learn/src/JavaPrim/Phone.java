@@ -1,3 +1,5 @@
+package JavaPrim;
+
 public class Phone {
     private String brand;
     private String color;
@@ -38,7 +40,7 @@ public class Phone {
 
     @Override
     public String toString() {
-        return "Phone{" +
+        return "JavaPrim.Phone{" +
                 "brand='" + brand + '\'' +
                 ", color='" + color + '\'' +
                 ", price=" + price +

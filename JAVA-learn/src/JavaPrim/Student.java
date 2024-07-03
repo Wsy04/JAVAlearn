@@ -1,3 +1,5 @@
+package JavaPrim;
+
 public class Student {
     private String id;
     private String name;
@@ -38,7 +40,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" +
+        return "JavaPrim.Student{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", age=" + age +

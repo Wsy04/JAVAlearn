@@ -1,3 +1,5 @@
+package JavaPrim;
+
 public class PhoneTest {
     public static void main(String[] args){
         Phone[] arr = new Phone[4];
