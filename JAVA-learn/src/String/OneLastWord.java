@@ -2,7 +2,7 @@ package String;
 //截取字符串中最后一个单词
 public class OneLastWord {
     public static void main(String[] args) {
-        String str = "第一次去 卢浮宫";
+        String str = "The first time i came to Le Louvre";
         System.out.println(getOneLastWord(str));
     }
     public static String getOneLastWord(String str){
