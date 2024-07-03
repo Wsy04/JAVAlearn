@@ -2,9 +2,9 @@ package String;
 
 public class SubStringTest {
     public static void main(String[] args) {
-//        String s1 = "13326459876";
-//        System.out.println(s1);
-//        System.out.println(PhoneNumberMask(s1));
+        String s1 = "13326459876";
+        System.out.println(s1);
+        System.out.println(PhoneNumberMask(s1));
 //        String s2 = "489123200411031224";
 //        PrintIdentityInfo(s2);
 //        String talk = "真是CS,SC的cs,CS";
