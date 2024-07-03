@@ -2,15 +2,16 @@ package Leetcode.leet150.array_string;
 
 public class Solution {
     public static void main(String[] args){
-        int[] nums1 = {1,2,3,0,0,0};
+        int[] nums1 = {1,1,2};
 //        int[] nums2 = {2,5,6};
-        int m = 0;
+//        int m = 0;
 //        int n = 3;
 //        merge(nums1,m,nums2,n);
 //        for (int j : nums1) {
 //            System.out.print(j + " ");
 //        }
-        System.out.println(removeElement(nums1,m));
+//        System.out.println(removeElement(nums1,m));
+        System.out.println(removeDuplicates(nums1));
     }
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
         int i = m-1,j = n-1;
@@ -34,6 +35,15 @@ public class Solution {
             }
         }
         return k;
+    }
+    public static int removeDuplicates(int[] nums) {
+        int k =0;
+        for (int i = 0; i < nums.length; i++) {
+            if(nums[i]!=nums[k]){
+                nums[++k] = nums[i];
+            }
+        }
+        return k+1;
     }
 
 }
