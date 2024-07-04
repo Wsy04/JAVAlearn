@@ -4,18 +4,20 @@ import java.util.HashMap;
 
 public class Solution {
     public static void main(String[] args){
-//        int[] nums1 = {1,1,2};
+        int[] nums1 = {1,2,3,4,5,6,7};
 //        int[] nums2 = {2,5,6};
 //        int m = 0;
 //        int n = 3;
-        String s = "MCMXCIV";
-        System.out.println(romanToInt(s));
+//        String s = "MCMXCIV";
+//        System.out.println(romanToInt(s));
 //        merge(nums1,m,nums2,n);
 //        for (int j : nums1) {
 //            System.out.print(j + " ");
 //        }
 //        System.out.println(removeElement(nums1,m));
-//        System.out.println(removeDuplicates(nums1));
+//        System.out.println(removeDuplicates2(nums1));
+//        System.out.println(majorityElement(nums1));
+        rotate(nums1,3);
     }
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
         int i = m-1,j = n-1;
@@ -79,6 +81,51 @@ public class Solution {
             default -> 0;
         };
     }
+    public static int removeDuplicates2(int[] nums) {
+        int len = nums.length;
+        if(len<2) return len;
+        int k = 2;
+        int i = 2;
+        while (i<len){
+            if(nums[i]!=nums[k-2]){
+                nums[k++] = nums[i];
+            }
+            i++;
+        }
+        return k;
+    }
+    public static int majorityElement(int[] nums) {
+        int cur = nums[0];
+        int count = 0;
+        for (int num : nums) {
+            if (cur == num) {
+                count++;
+            }
+            else if(count==0){
+                cur = num;
+            }
+            else count--;
+        }
+        return cur;
+    }
+    public static void rotate(int[] nums, int k) {
+        int len = nums.length;
+        k%=len;
+        reverse(nums,0,len-1);
+        reverse(nums,0,k-1);
+        reverse(nums,k,len-1);
+        for (int num : nums) {
+            System.out.print(num+" ");
+        }
+    }
 
-
+    public static void reverse(int[] nums,int begin,int end){
+        while (begin<end){
+            int temp = nums[begin];
+            nums[begin] = nums[end];
+            nums[end] = temp;
+            end--;
+            begin++;
+        }
+    }
 }
