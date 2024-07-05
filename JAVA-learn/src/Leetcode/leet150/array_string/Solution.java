@@ -4,7 +4,8 @@ import java.util.HashMap;
 
 public class Solution {
     public static void main(String[] args){
-        int[] nums1 = {1,2,3,4,5,6,7};
+        int[] nums1 = {1,2,3,4,5};
+        System.out.println(maxProfit2(nums1));
 //        int[] nums2 = {2,5,6};
 //        int m = 0;
 //        int n = 3;
@@ -17,7 +18,7 @@ public class Solution {
 //        System.out.println(removeElement(nums1,m));
 //        System.out.println(removeDuplicates2(nums1));
 //        System.out.println(majorityElement(nums1));
-        rotate(nums1,3);
+//        rotate(nums1,3);
     }
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
         int i = m-1,j = n-1;
@@ -114,9 +115,6 @@ public class Solution {
         reverse(nums,0,len-1);
         reverse(nums,0,k-1);
         reverse(nums,k,len-1);
-        for (int num : nums) {
-            System.out.print(num+" ");
-        }
     }
 
     public static void reverse(int[] nums,int begin,int end){
@@ -127,5 +125,34 @@ public class Solution {
             end--;
             begin++;
         }
+    }
+    public static int maxProfit(int[] prices) {
+        int buy = prices[0];
+        int max = 0;
+        for (int i = 1; i < prices.length; i++) {
+            if(prices[i]>buy){
+                max = Math.max(max,prices[i]-buy);
+            }
+            else buy = prices[i];
+        }
+        return max;
+    }
+    public static boolean canJump(int[] nums) {
+        int target = nums.length-1;
+        for (int i = nums.length - 2; i >= 0; i--) {
+            if(nums[i]+i>=target){
+                target = i;
+            }
+        }
+        return target==0;
+    }
+    public static int maxProfit2(int[] prices){
+        int sum = 0;
+        for (int i = 1; i < prices.length; i++) {
+            int temp = prices[i]-prices[i-1];
+            if(temp>0) sum+=temp;
+        }
+
+        return sum;
     }
 }
