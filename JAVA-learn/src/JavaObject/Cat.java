@@ -6,11 +6,17 @@ public class Cat extends Animal{
     }
 
     public Cat() {
-        this("哈吉米",0);
+        super();
+        System.out.println("Cat无参构造");
     }
 
     public Cat(String name, int age) {
         super(name, age);
+    }
+
+    @Override
+    public void show() {
+        System.out.println("Cat--show");
     }
 
 }

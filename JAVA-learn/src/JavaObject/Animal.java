@@ -1,13 +1,13 @@
 package JavaObject;
 
 public class Animal {
-    private String name;
+    private String name = "Animal";
     private int age;
     public void eat(){
-        System.out.println("吃饭");
+        System.out.println(name+"吃饭");
     }
     public void drink(){
-        System.out.println("喝水");
+        System.out.println(name+"喝水");
     }
     public Animal(){
         System.out.println("Animal Class 无参构造");
@@ -32,5 +32,8 @@ public class Animal {
 
     public void setAge(int age) {
         this.age = age;
+    }
+    public void show(){
+        System.out.println("Animal--show");
     }
 }

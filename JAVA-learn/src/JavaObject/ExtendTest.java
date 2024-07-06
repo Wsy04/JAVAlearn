@@ -17,13 +17,12 @@ public class ExtendTest {
 //
 //        Teddy teddy = new Teddy();
 //        teddy.eat();
-        Cat cat = new Cat("helloKitty",18);
-        Cat cat1 = new Cat();
-        System.out.println(cat.getName());
-        System.out.println(cat.getAge());
-        System.out.println(cat1.getName());
-        System.out.println(cat1.getAge());
-
+        Animal animal = new Cat();
+        System.out.println(animal.getName());
+        animal.show();
+        if(animal instanceof Cat cat){
+            cat.catchMouse();
+        }
 
     }
 }
