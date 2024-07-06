@@ -8,5 +8,15 @@ public class EmployeeTest {
         Staff staff = new Staff("002","wei",100);
         staff.printInfo();
         staff.work();
+        eat(staff);
+        eat(manager);
+        work(staff);
+        work(manager);
+    }
+    public static void eat(Employee employee){
+        employee.eat();
+    }
+    public static void work(Employee employee){
+        employee.work();
     }
 }
