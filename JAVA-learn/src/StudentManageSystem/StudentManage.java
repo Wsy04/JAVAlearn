@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class StudentManage {
-    public static void ManageSystem(){
+    public static void main(String[] args) {
         final String ADD_STUDENT = "1";
         final String DELETE_STUDENT = "2";
         final String UPDATE_STUDENT = "3";

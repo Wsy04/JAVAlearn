@@ -5,8 +5,12 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class App {
+    static ArrayList<User> list = new ArrayList<>();
+    static {
+        list.add(new User("wsy","123456","114514202407081234","12312341234"));
+    }
     public static void main(String[] args) {
-        ArrayList<User> list = new ArrayList<>();
+
         while (true) {
             System.out.println("欢迎来到学生管理系统");
             System.out.println("请选择你的操作:1登录 2注册 3忘记密码 4退出");
@@ -52,7 +56,7 @@ public class App {
             if(checkUserInfo(list,user)){
                 System.out.println("密码正确,登录成功");
                 System.out.println(username+"登录成功");
-                StudentManage.ManageSystem();
+                StudentManage.main(null);
                 return;
             }
             else System.out.println("登录失败,剩余"+(2-i)+"次机会");
