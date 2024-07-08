@@ -1,11 +1,23 @@
 package Leetcode.leet150.array_string;
 
-import java.util.Arrays;
+import java.util.*;
 
 public class Solution {
     public static void main(String[] args){
-        int[] nums1 = {11,15};
-        System.out.println(hIndex(nums1));
+        RandomizedSet set = new RandomizedSet();
+//        System.out.println(set.insert(1));
+//        System.out.println(set.remove(2));
+//        System.out.println(set.insert(2));
+//        System.out.println(set.getRandom());
+//        System.out.println(set.remove(1));
+//        System.out.println(set.insert(2));
+//        System.out.println(set.getRandom());
+        System.out.println(set.remove(0));
+        System.out.println(set.remove(0));
+        System.out.println(set.insert(0));
+        System.out.println(set.getRandom());
+        System.out.println(set.remove(0));
+        System.out.println(set.insert(0));
     }
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
         int i = m-1,j = n-1;
@@ -165,5 +177,48 @@ public class Solution {
             ans--;
         }
         return ans;
+    }
+    public static class RandomizedSet {
+        private ArrayList<Integer> list;
+        private HashMap<Integer,Integer> map;
+        private Random r;
+        public RandomizedSet() {
+//            RandomizedSet() 初始化 RandomizedSet 对象
+            list = new ArrayList<>();
+            map = new HashMap<>();
+            r = new Random();
+        }
+
+        public boolean insert(int val) {
+//            bool insert(int val) 当元素 val 不存在时，向集合中插入该项，并返回 true ；否则，返回 false 。
+            if(map.containsKey(val))
+                return false;
+            else {
+                map.put(val,list.size());
+                list.add(val);
+                return true;
+            }
+        }
+
+        public boolean remove(int val) {
+//            bool remove(int val) 当元素 val 存在时，从集合中移除该项，并返回 true ；否则，返回 false 。
+            if(map.containsKey(val)){
+                int pos = map.get(val);//val在list中的索引
+                int last = list.getLast();//list末尾元素的值
+                list.set(pos,last);//用末尾元素覆盖val
+                map.put(last,pos);//修改末尾元素的位置记录
+                map.remove(val);//删除val的位置记录
+                list.removeLast();
+                return true;
+            }
+            return false;
+        }
+
+        public int getRandom() {
+//            int getRandom() 随机返回现有集合中的一项
+//            （测试用例保证调用此方法时集合中至少存在一个元素）。
+//            每个元素应该有相同的概率被返回。
+            return list.get(r.nextInt(list.size()));
+        }
     }
 }
