@@ -5,6 +5,11 @@ import java.util.Scanner;
 
 public class StudentManage {
     public static void ManageSystem(){
+        final String ADD_STUDENT = "1";
+        final String DELETE_STUDENT = "2";
+        final String UPDATE_STUDENT = "3";
+        final String QUERY_STUDENT = "4";
+        final String QUIT = "5";
         String chioce;
         Scanner sc = new Scanner(System.in);
         ArrayList<Student> students = new ArrayList<>();
@@ -18,11 +23,11 @@ public class StudentManage {
             System.out.println("5:退出");
             chioce = sc.next();
             switch (chioce) {
-                case "1" -> addStudent(students);
-                case "2" -> deleteStudent(students);
-                case "3" -> updateStudent(students);
-                case "4" -> inquireStudent(students);
-                case "5" -> {
+                case ADD_STUDENT -> addStudent(students);
+                case DELETE_STUDENT ->  deleteStudent(students);
+                case UPDATE_STUDENT -> updateStudent(students);
+                case QUERY_STUDENT -> inquireStudent(students);
+                case QUIT -> {
                     break loop;
 //                    System.exit(0);
                 }
