@@ -159,8 +159,9 @@ public class Solution {
     public static int hIndex(int[] citations) {
         Arrays.sort(citations);
         int len = citations.length;
-        int ans = Math.min(citations[len-1],len);
-        while(ans>0&&citations[len-ans]<ans){
+        int ans = Math.min(citations[len-1],len);//答案不会超过总的论文数量和单篇论文的最高引用量
+        while(ans>0&&citations[len-ans]<ans){//citations[len-ans]<ans代表从len-ans到len-1
+            // 一共ans篇论文引用量都大于ans,找到最大的满足条件的ans即可停止
             ans--;
         }
         return ans;
