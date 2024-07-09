@@ -4,9 +4,9 @@ import java.util.*;
 
 public class Solution {
     public static void main(String[] args) {
-        int[] arr = {1,3,4,5,2};
+        int[] arr = {0,1,0,2,1,0,1,3,2,1,2,1};
         int[] arr2 = {3, 4, 5, 1, 2};
-        int ans = candy(arr);
+        int ans = trap(arr);
         System.out.println(ans);
 //        int[] ans = productExceptSelf(arr);
 //        for (int i : ans) {
@@ -278,5 +278,24 @@ public class Solution {
             sum += i;
         }//
         return sum;
+    }
+
+    public static int trap(int[] height) {
+        int ans = 0;
+        int left = 0, right = height.length - 1;
+        int leftMax = 0, rightMax = 0;
+        while (left < right) {
+            leftMax = Math.max(leftMax, height[left]);
+            rightMax = Math.max(rightMax, height[right]);
+            if(height[left]<height[right]) {//rightMax>leftMax,水位一定取决于左边,将该位置水量计入
+                ans+=leftMax-height[left];
+                left++;
+            }
+            else {//rightMax<=leftMax,水位一定取决于右边,将该位置水量计入
+                ans+=rightMax-height[right];
+                right--;
+            }
+        }
+        return ans;
     }
 }

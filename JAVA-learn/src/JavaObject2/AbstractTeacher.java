@@ -1,6 +1,6 @@
 package JavaObject2;
 
-public class AbstractTeacher extends AbstractPerson{
+public class AbstractTeacher extends AbstractPerson {
     public AbstractTeacher() {
     }
 

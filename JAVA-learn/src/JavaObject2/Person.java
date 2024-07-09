@@ -28,13 +28,13 @@ public class Person {
         this.age = age;
     }
 
-    public void keepPet(Animal animal,String something){
-        if(animal instanceof Cat c){
+    public void keepPet(Animal animal, String something) {
+        if (animal instanceof Cat c) {
             c.catchMouse();
         }
-        String animalKind = animal instanceof Cat?"猫":"狗";
-        System.out.println("年龄为"+age+"岁的"+name+"养了一只"+animal.getColor()+
-                "颜色的"+animal.getAge()+"岁的"+animalKind);
+        String animalKind = animal instanceof Cat ? "猫" : "狗";
+        System.out.println("年龄为" + age + "岁的" + name + "养了一只" + animal.getColor() +
+                "颜色的" + animal.getAge() + "岁的" + animalKind);
         animal.eat(something);
     }
 }
