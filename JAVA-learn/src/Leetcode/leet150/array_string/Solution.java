@@ -276,7 +276,7 @@ public class Solution {
         }
         for (int i : Candy) {
             sum += i;
-        }
+        }//
         return sum;
     }
 }
