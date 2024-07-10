@@ -4,15 +4,8 @@ import java.util.*;
 
 public class Solution {
     public static void main(String[] args) {
-        int[] arr = {0,1,0,2,1,0,1,3,2,1,2,1};
-        int[] arr2 = {3, 4, 5, 1, 2};
-        int ans = trap(arr);
-        System.out.println(ans);
-//        int[] ans = productExceptSelf(arr);
-//        for (int i : ans) {
-//            System.out.print(i + " ");
-//        }
-
+        String s = " ";
+        System.out.println(reverseWords(s));
     }
 
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
@@ -49,23 +42,6 @@ public class Solution {
         return k + 1;
     }
 
-    public static int romanToInt(String s) {
-        int res = 0;
-        int curInt;
-        int preInt = getValue(s.charAt(0));
-        for (int i = 1; i < s.length(); i++) {
-            curInt = getValue(s.charAt(i));
-            if (curInt > preInt) {
-                res -= preInt;
-            } else
-                res += preInt;
-            preInt = curInt;
-        }
-        res += preInt;
-        return res;
-
-
-    }
 
     private static int getValue(char ch) {
         return switch (ch) {
@@ -287,15 +263,101 @@ public class Solution {
         while (left < right) {
             leftMax = Math.max(leftMax, height[left]);
             rightMax = Math.max(rightMax, height[right]);
-            if(height[left]<height[right]) {//rightMax>leftMax,水位一定取决于左边,将该位置水量计入
-                ans+=leftMax-height[left];
+            if (height[left] < height[right]) {//rightMax>leftMax,水位一定取决于左边,将该位置水量计入
+                ans += leftMax - height[left];
                 left++;
-            }
-            else {//rightMax<=leftMax,水位一定取决于右边,将该位置水量计入
-                ans+=rightMax-height[right];
+            } else {//rightMax<=leftMax,水位一定取决于右边,将该位置水量计入
+                ans += rightMax - height[right];
                 right--;
             }
         }
         return ans;
+    }
+
+    public static int romanToInt(String s) {
+        int res = 0;
+        int curInt;
+        int preInt = getValue(s.charAt(0));
+        for (int i = 1; i < s.length(); i++) {
+            curInt = getValue(s.charAt(i));
+            if (curInt > preInt) {
+                res -= preInt;
+            } else
+                res += preInt;
+            preInt = curInt;
+        }
+        res += preInt;
+        return res;
+
+
+    }
+
+    public static String intToRoman(int num) {
+        int[] numbers = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1};
+        String[] romans = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < romans.length; i++) {
+            int number = numbers[i];
+            String s = romans[i];
+            while (num >= number) {
+                sb.append(s);
+                num -= number;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static int lengthOfLastWord(String s) {
+        int len = 0;
+        int i = s.length() - 1;
+        while (s.charAt(i) == ' ') i--;
+        while (i >= 0 && s.charAt(i) != ' ') {
+            i--;
+            len++;
+        }
+        return len;
+    }
+
+    public static String longestCommonPrefix(String[] strs) {
+        int i = 0;
+        if(strs.length==0) return "";
+        if(strs.length==1) return strs[0];
+        if(strs[0].isEmpty()) return "";
+        char ch = strs[0].charAt(0);
+        StringBuilder sb = new StringBuilder();
+        while (true) {
+            for (String str : strs) {
+                if(i>=str.length()) return sb.toString();
+                if(ch != str.charAt(i)) return sb.toString();
+            }
+            sb.append(ch);
+            i++;
+            if(i>=strs[0].length()) return sb.toString();
+            ch = strs[0].charAt(i);
+        }
+    }
+
+    public static String reverseWords(String s) {
+        int i = s.length()-1;
+        int j;
+        StringBuilder sb = new StringBuilder();
+        int end = 0;
+        while (s.charAt(end) == ' ') {
+            end++;
+        }
+        while (i>=end) {
+            j = i;
+            while (j >= end && s.charAt(j) == ' ') {
+                j--;
+            }
+            i = j;
+            while (i>=end && s.charAt(i) != ' ') {
+                i--;
+            }
+            sb.append(s, i+1, j+1);
+            if(i>end)
+                sb.append(' ');
+        }
+        return sb.toString();
     }
 }
