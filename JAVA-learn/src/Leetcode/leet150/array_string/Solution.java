@@ -4,8 +4,8 @@ import java.util.*;
 
 public class Solution {
     public static void main(String[] args) {
-        String s = " ";
-        System.out.println(reverseWords(s));
+        String[] words = {"This", "is", "an", "example", "of", "text", "justification."};
+        fullJustify(words, 16).forEach(System.out::println);
     }
 
     public static void merge(int[] nums1, int m, int[] nums2, int n) {
@@ -41,7 +41,6 @@ public class Solution {
         }
         return k + 1;
     }
-
 
     private static int getValue(char ch) {
         return switch (ch) {
@@ -320,44 +319,129 @@ public class Solution {
 
     public static String longestCommonPrefix(String[] strs) {
         int i = 0;
-        if(strs.length==0) return "";
-        if(strs.length==1) return strs[0];
-        if(strs[0].isEmpty()) return "";
+        if (strs.length == 0) return "";
+        if (strs.length == 1) return strs[0];
+        if (strs[0].isEmpty()) return "";
         char ch = strs[0].charAt(0);
         StringBuilder sb = new StringBuilder();
         while (true) {
             for (String str : strs) {
-                if(i>=str.length()) return sb.toString();
-                if(ch != str.charAt(i)) return sb.toString();
+                if (i >= str.length()) return sb.toString();
+                if (ch != str.charAt(i)) return sb.toString();
             }
             sb.append(ch);
             i++;
-            if(i>=strs[0].length()) return sb.toString();
+            if (i >= strs[0].length()) return sb.toString();
             ch = strs[0].charAt(i);
         }
     }
 
     public static String reverseWords(String s) {
-        int i = s.length()-1;
+        int i = s.length() - 1;
         int j;
         StringBuilder sb = new StringBuilder();
         int end = 0;
         while (s.charAt(end) == ' ') {
             end++;
         }
-        while (i>=end) {
+        while (i >= end) {
             j = i;
             while (j >= end && s.charAt(j) == ' ') {
                 j--;
             }
             i = j;
-            while (i>=end && s.charAt(i) != ' ') {
+            while (i >= end && s.charAt(i) != ' ') {
                 i--;
             }
-            sb.append(s, i+1, j+1);
-            if(i>end)
+            sb.append(s, i + 1, j + 1);
+            if (i > end)
                 sb.append(' ');
         }
         return sb.toString();
+    }
+
+    public static String convert(String s, int numRows) {
+        StringBuilder[] sbs = new StringBuilder[numRows];
+        for (int i = 0; i < sbs.length; i++) {
+            sbs[i] = new StringBuilder();
+        }
+        int len = s.length();
+        for (int i = 0; i < len; ) {
+            int j = 0;
+            while (j < numRows && i < len) {
+                sbs[j].append(s.charAt(i));
+                i++;
+                j++;
+            }
+            j = numRows - 2;
+            while (j >= 1 && i < len) {
+                sbs[j].append(s.charAt(i));
+                i++;
+                j--;
+            }
+        }
+        for (int i = 1; i < sbs.length; i++) {
+            sbs[0].append(sbs[i]);
+        }
+        return sbs[0].toString();
+    }
+
+    public static int strStr(String haystack, String needle) {
+        return haystack.indexOf(needle);
+    }
+
+    public static List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> list = new ArrayList<>();
+        int len = 0;
+        for (String word : words) {
+            len += word.length();//统计全体单词的总长度,用于判断是否到达最后一行
+        }
+        int i = 0;
+        while (i < words.length) {
+            StringBuilder sb = new StringBuilder();
+            int j = i;//可能选取到的单词
+            int l = 0;//此行文本长度
+            int space = 0;//此行空格个数
+            if(len+(words.length-1-i)<=maxWidth){//最后一行
+                len = maxWidth;
+                while(i<words.length-1){
+                    sb.append(words[i]);
+                    sb.append(" ");
+                    len-=words[i].length()+1;
+                    i++;
+                }
+                sb.append(words[i]);
+                len-=words[i].length();
+                sb.append(" ".repeat(len));//填充空格
+                list.add(sb.toString());
+                return list;
+            }
+            while (j < words.length && l + space + words[j].length() <= maxWidth) {
+                l += words[j].length();
+                j++;
+                space++;
+            }
+            j--;
+            space = maxWidth - l;
+            int eachSpace = space / Math.max(j - i,1);//平均每个单词之间要多少空格,这一行选取了j-i+1个单词,则有j-i个间隔
+            int mulSpace = space % Math.max(j - i,1);//有多少个间隔长度比平均多一
+            for (int k = i; k < j; k++) {
+                sb.append(words[k]);
+                if (mulSpace > 0) {//若不能平均分配空格,左边的分配更多的空格
+                    sb.append(' ');
+                    mulSpace--;
+                }
+                sb.append(" ".repeat(eachSpace));
+                len-=words[k].length();
+            }
+            sb.append(words[j]);
+            if(i==j)
+                sb.append(" ".repeat(eachSpace));//对于一行只填了一个单词的情况在末尾填充空格
+            len-=words[j].length();
+            list.add(sb.toString());
+            i = j + 1;
+
+        }
+        return list;
     }
 }
