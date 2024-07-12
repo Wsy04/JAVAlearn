@@ -5,7 +5,7 @@ import JUI.RegisterFrame;
 public class APP {
     public static void main(String[] args) {
         new GameFrame();
-        new LoginFrame();
-        new RegisterFrame();
+//        new LoginFrame();
+//        new RegisterFrame();
     }
 }
