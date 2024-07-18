@@ -7,12 +7,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.util.Random;
 
-public class GameFrame extends JFrame {
+public class GameFrame extends JFrame implements KeyListener, ActionListener {
     //创建一个数组,用于指定图片创建的顺序
-    int[] data = new int[16];
-
+    int[][] data = new int[4][4];//16个图片位置的索引
+    //正确的数据组织方式
+    int[][] win = {
+            {1,2,3,4},
+            {5,6,7,8},
+            {9,10,11,12},
+            {13,14,15,0}
+    };
+    //空白位置的索引
+    int blankX = 0;
+    int blankY = 0;
+    //当前展示图片的路径
+    String path = "../PuzzleGame/image/animal/animal3/";
     public GameFrame() {
         //初始化界面
         InitJFrame();
@@ -33,26 +47,55 @@ public class GameFrame extends JFrame {
 
     private void InitData() {
         Random rand = new Random();
+        //按0-15排列
         for (int i = 0; i < data.length; i++) {
-            data[i] = i + 1;
+            for (int j = 0; j < data[0].length; j++) {
+                data[i][j] = i * 4 + j;
+            }
+        }
+        //打乱顺序
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[0].length; j++) {
+                int r = rand.nextInt(16);
+                int x = r/4;
+                int y = r%4;
+                int temp = data[i][j];
+                data[i][j] = data[x][y];
+                data[x][y] = temp;
+            }
         }
         for (int i = 0; i < data.length; i++) {
-            int r = rand.nextInt(data.length);
-            int temp = data[i];
-            data[i] = data[r];
-            data[r] = temp;
+            for (int j = 0; j < data[i].length; j++) {
+                if (data[i][j] == 0) {
+                    blankX = i;
+                    blankY = j;
+                    break;
+                }
+            }
         }
     }
 
     private void InitImage() {
+        //清空之前的所有图片
+        getContentPane().removeAll();
+
+        //判断是否已经成功
+        if(victory()){
+            JLabel winLabel = new JLabel(new ImageIcon("../PuzzleGame/image/win.png"));
+            winLabel.setBounds(203,283,197,73);
+            getContentPane().add(winLabel);
+
+        }
+
 
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 //为图片指定随机的位置
-                int num = data[i * 4 + j];
+                int num = data[i][j];
+
                 //创建图片对象
-                ImageIcon icon = new ImageIcon("C:\\Users\\20578\\IdeaProjects\\PuzzleGame" +
-                        "\\image\\animal\\animal3\\" + num + ".jpg");
+                ImageIcon icon = new ImageIcon(path + num + ".jpg");
+
                 //创建管理容器对象
                 JLabel label = new JLabel(icon);
                 //指定图片位置
@@ -60,19 +103,21 @@ public class GameFrame extends JFrame {
                 //给图片增加边框
                 //raised表示凸
                 //lowered表示凹
-                label.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.BLACK,Color.yellow));
+                label.setBorder(new BevelBorder(BevelBorder.LOWERED, Color.BLACK, Color.yellow));
                 //将容器添加到窗体
                 getContentPane().add(label);
                 num++;
             }
         }
         //添加背景图片
-        ImageIcon background = new ImageIcon("C:\\Users\\20578\\IdeaProjects" +
-                "\\PuzzleGame\\image\\background.png");
+
+        ImageIcon background = new ImageIcon("../PuzzleGame/image/background.png");
         JLabel backgroundLabel = new JLabel(background);
         backgroundLabel.setBounds(40, 40, background.getIconWidth(), background.getIconHeight());
         getContentPane().add(backgroundLabel);
 
+        //刷新页面
+        getContentPane().repaint();
     }
 
     private void InitMenu() {
@@ -115,6 +160,126 @@ public class GameFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //按坐标添加组件,取消默认的居中添加
         setLayout(null);
+        //给整个页面增加键盘监听事件
+        addKeyListener(this);
     }
 
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int code = e.getKeyCode();
+        //长按a查看完整图片
+        if(code==65){
+            //清空当前页面
+            getContentPane().removeAll();
+            //加载完整图片
+            JLabel all = new JLabel(new ImageIcon(path+"all.jpg"));
+            all.setBounds(83,134,420,420);
+            getContentPane().add(all);
+            //添加背景图片
+
+            ImageIcon background = new ImageIcon("../PuzzleGame/image/background.png");
+            JLabel backgroundLabel = new JLabel(background);
+            backgroundLabel.setBounds(40, 40, background.getIconWidth(), background.getIconHeight());
+            getContentPane().add(backgroundLabel);
+
+            //刷新页面
+            getContentPane().repaint();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(victory()){
+            return;
+        }
+        //对上下左右进行判断
+        //定义上下左右的常量
+        final int LEFT_KEY = 37;
+        final int UP_KEY = 38;
+        final int RIGHT_KEY = 39;
+        final int DOWN_KEY = 40;
+        final int ALL_KEY = 65;
+        final int WIN_KEY = 87;
+        int code = e.getKeyCode();
+        switch (code) {
+            case LEFT_KEY -> {
+                //将空白块右边的图片向左移动
+                System.out.println("left");
+                if(blankY+1<data[0].length) {
+                    //交换图片位置索引
+                    data[blankX][blankY] = data[blankX][blankY+1];
+                    data[blankX][blankY+1] = 0;
+                    blankY++;
+                    //重新加载图片
+                    InitImage();
+                }
+            }
+            case UP_KEY -> {
+                System.out.println("up");
+                if(blankX+1<data[0].length) {
+                    //交换图片位置索引
+                    data[blankX][blankY] = data[blankX+1][blankY];
+                    data[blankX+1][blankY] = 0;
+                    blankX++;
+                    //重新加载图片
+                    InitImage();
+                }
+            }
+            case RIGHT_KEY -> {
+                System.out.println("right");
+                if(blankY-1>=0) {
+                    //交换图片位置索引
+                    data[blankX][blankY] = data[blankX][blankY-1];
+                    data[blankX][blankY-1] = 0;
+                    blankY--;
+                    //重新加载图片
+                    InitImage();
+                }
+            }
+            case DOWN_KEY -> {
+                System.out.println("down");
+                if(blankX-1>=0) {
+                    //交换图片位置索引
+                    data[blankX][blankY] = data[blankX-1][blankY];
+                    data[blankX-1][blankY] = 0;
+                    blankX--;
+                    //重新加载图片
+                    InitImage();
+                }
+            }
+            case ALL_KEY -> {
+                InitImage();
+            }
+            case WIN_KEY -> {
+                data = new int[][]{
+                        {1,2,3,4},
+                        {5,6,7,8},
+                        {9,10,11,12},
+                        {13,14,15,0}
+                };
+                InitImage();
+            }
+        }
+    }
+
+    public boolean victory(){
+        for (int i = 0; i < data.length; i++) {
+            for (int j = 0; j < data[0].length; j++) {
+                if(data[i][j]!=win[i][j]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

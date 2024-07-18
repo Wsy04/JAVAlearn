@@ -1,9 +1,13 @@
 package Leetcode.leet150.doublePointer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class Solution {
     public static void main(String[] args) {
-        int[] nums = {1, 8, 6, 2, 5, 4, 8, 3, 7};
-        System.out.println(maxArea(nums));
+        int[] nums = {0, 0, 0};
+        System.out.println(threeSum(nums));
     }
 
     public static boolean isPalindrome(String s) {
@@ -73,5 +77,35 @@ public class Solution {
             }
         }
         return ans;
+    }
+
+    public static List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > 0) break;
+            int left = i + 1, right = nums.length - 1;
+            while (left < right) {
+                if (nums[i] + nums[left] + nums[right] > 0) {
+                    right--;
+                } else if (nums[i] + nums[left] + nums[right] < 0) {
+                    left++;
+                } else {
+                    res.add(Arrays.asList(nums[i], nums[left], nums[right]));
+                    while (left < right && nums[left] == nums[left + 1]) {
+                        left++;
+                    }
+                    left++;
+                    while (left < right && nums[right] == nums[right - 1]) {
+                        right--;
+                    }
+                    right--;
+                }
+            }
+            while (i < nums.length - 1 && nums[i] == nums[i + 1]) {
+                i++;
+            }
+        }
+        return res;
     }
 }
