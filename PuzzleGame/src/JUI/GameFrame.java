@@ -22,6 +22,13 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
             {9,10,11,12},
             {13,14,15,0}
     };
+    //创建选项下面的条目对象
+    JMenuItem replayItem = new JMenuItem("重新游戏");
+    JMenuItem reLoginItem = new JMenuItem("重新登录");
+    JMenuItem exitItem = new JMenuItem("退出游戏");
+    JMenuItem aboutItem = new JMenuItem("作者信息");
+    //统计步数的变量
+    int step = 0;
     //空白位置的索引
     int blankX = 0;
     int blankY = 0;
@@ -87,7 +94,10 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
         }
 
-
+        //显示步数
+        JLabel stepCount = new JLabel("步数"+step);
+        stepCount.setBounds(50,30,100,20);
+        getContentPane().add(stepCount);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
                 //为图片指定随机的位置
@@ -127,17 +137,19 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
         JMenu functionMenu = new JMenu("功能");
         JMenu aboutMenu = new JMenu("关于我们");
 
-        //创建选项下面的条目对象
-        JMenuItem replayItem = new JMenuItem("重置本关");
-        JMenuItem reLoginItem = new JMenuItem("重新登录");
-        JMenuItem exitItem = new JMenuItem("退出游戏");
-        JMenuItem aboutItem = new JMenuItem("作者信息");
+
 
         //将条目添加到选项对象当中
         functionMenu.add(replayItem);
         functionMenu.add(reLoginItem);
         functionMenu.add(exitItem);
         aboutMenu.add(aboutItem);
+
+        //给条目添加事件
+        replayItem.addActionListener(this);
+        reLoginItem.addActionListener(this);
+        exitItem.addActionListener(this);
+        aboutItem.addActionListener(this);
 
         //将选项添加到菜单上面
         menuBar.add(functionMenu);
@@ -166,7 +178,28 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        Object obj = e.getSource();
+        //判断点击的是哪个
+        if(obj == replayItem){
+            System.out.println("重新游戏");
+            //打乱二维数组
+            InitData();
+            //计步器清零
+            step = 0;
+            //重新加载图片
+            InitImage();
+        }else if(obj == reLoginItem){
+            System.out.println("重新登录");
+            //关闭当前界面
+            setVisible(false);
+            //打开登录界面
+            new LoginFrame();
+        }else if(obj == exitItem){
+            System.out.println("退出游戏");
+            System.exit(0);
+        }else if(obj == aboutItem){
+            System.out.println("关于我们");
+        }
     }
 
     @Override
@@ -220,6 +253,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
                     data[blankX][blankY] = data[blankX][blankY+1];
                     data[blankX][blankY+1] = 0;
                     blankY++;
+                    //步数加1
+                    step++;
                     //重新加载图片
                     InitImage();
                 }
@@ -231,6 +266,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
                     data[blankX][blankY] = data[blankX+1][blankY];
                     data[blankX+1][blankY] = 0;
                     blankX++;
+                    //步数加1
+                    step++;
                     //重新加载图片
                     InitImage();
                 }
@@ -242,6 +279,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
                     data[blankX][blankY] = data[blankX][blankY-1];
                     data[blankX][blankY-1] = 0;
                     blankY--;
+                    //步数加1
+                    step++;
                     //重新加载图片
                     InitImage();
                 }
@@ -253,6 +292,8 @@ public class GameFrame extends JFrame implements KeyListener, ActionListener {
                     data[blankX][blankY] = data[blankX-1][blankY];
                     data[blankX-1][blankY] = 0;
                     blankX--;
+                    //步数加1
+                    step++;
                     //重新加载图片
                     InitImage();
                 }
