@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Solution {
     private static HashMap<Integer, Integer> map;
+    private static LinkedList<TreeNode> queue;
 
     public static void main(String[] args) {
         int[] preorder = {3,9,20,15,7};
@@ -31,6 +32,17 @@ public class Solution {
             this.left = left;
             this.right = right;
         }
+    }
+
+    public static class Node{
+        int val;
+        Node left;
+        Node right;
+        Node next;
+        public Node(int val) {
+            this.val = val;
+        }
+
     }
 
     public static int maxDepth(TreeNode root) {
@@ -132,4 +144,45 @@ public class Solution {
         root.right = myBuildTree2(inorder,postorder,pos+1,inorder_right,postorder_right-size_right,postorder_right-1);
         return root;
     }
+
+    public static Node connect(Node root) {
+        if(root == null) return null;
+        Node head = root;//每层的头结点
+        while(head != null) {
+            Node dummyHead = new Node(-1);//虚拟头结点
+            Node temp = dummyHead;//用于连接下一层的变量
+            for(Node cur = head; cur != null; cur = cur.next) {//遍历当前层
+                if(cur.left!=null){
+                    temp.next = cur.left;//进行连接
+                    temp = temp.next;
+                }
+                if(cur.right!=null){
+                    temp.next = cur.right;
+                    temp = temp.next;
+                }
+            }
+            head = dummyHead.next;//从下一层的头结点开始
+        }
+        return root;
+    }
+
+    public static void flatten(TreeNode root) {
+        //本质上是把左子树插入到右子树之前
+        while (root != null) {
+            if(root.left == null) {
+                root = root.right;//左子树为空,无需处理
+            }
+            else {
+                TreeNode temp = root.left;
+                while(temp.right != null) {
+                    temp = temp.right;//左子树中最右端的结点
+                }
+                temp.right = root.right;//插入到右子树之前
+                root.right = root.left;//左子树移动到右边
+                root.left = null;
+                root = root.right;
+            }
+        }
+    }
+
 }
