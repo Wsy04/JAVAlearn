@@ -15,7 +15,8 @@ public class Solution {
             next = null;
         }
     }
-    public static class Node{
+
+    public static class Node {
         int val;
         Node next;
         Node random;
@@ -26,10 +27,22 @@ public class Solution {
             this.random = null;
         }
     }
+
     public static void main(String[] args) {
-        ListNode head = new ListNode(3);
-        head.next = new ListNode(5);
-        ListNode node = reverseBetween(head,1,2);
+        ListNode head = new ListNode(1);
+        ListNode node1 = new ListNode(2);
+        ListNode node2 = new ListNode(3);
+        ListNode node3 = new ListNode(4);
+        ListNode node4 = new ListNode(5);
+        ListNode node5 = new ListNode(4);
+        ListNode node6 = new ListNode(5);
+        head.next = node1;
+        node1.next = node2;
+//        node2.next = node3;
+//        node3.next = node4;
+//        node4.next = node5;
+//        node5.next = node6;
+        ListNode node = rotateRight(head, 4);
         while (node != null) {
             System.out.println(node.val);
             node = node.next;
@@ -90,15 +103,15 @@ public class Solution {
     }
 
     public static Node copyRandomList(Node head) {
-        if(head==null) return null;
+        if (head == null) return null;
         HashMap<Node, Node> map = new HashMap<>();
         Node temp = head;
-        while(temp!=null){
+        while (temp != null) {
             map.put(temp, new Node(temp.val));
             temp = temp.next;
         }
         temp = head;
-        while(temp!=null){
+        while (temp != null) {
             map.get(temp).next = map.get(temp.next);
             map.get(temp).random = map.get(temp.random);
             temp = temp.next;
@@ -107,22 +120,121 @@ public class Solution {
     }
 
     public static ListNode reverseBetween(ListNode head, int left, int right) {
-        ArrayList<ListNode> list = new ArrayList<>();
-        list.add(new ListNode());
-        while (head != null) {
-            list.add(head);
-            head = head.next;
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode prev = dummy;
+        for (int i = 0; i < left - 1; i++) {
+            prev = prev.next;
         }
-        if(right+1<list.size())
-            list.get(left).next = list.get(right+1);
-        else list.get(left).next = null;
-        for (int i = left+1; i <= right; i++) {
-            list.get(i).next = list.get(i-1);
+        ListNode Left1 = prev;
+        ListNode Left2 = prev.next;
+        for (int i = 0; i < right - left + 1; i++) {
+            prev = prev.next;
         }
-        list.get(left-1).next = list.get(right);
-        if(left>1)
-            return list.get(1);
-        else return list.get(right);
+        ListNode Right1 = prev;
+        ListNode Right2 = prev.next;
+        //截断链表
+        Left1.next = null;
+        Right1.next = null;
+        reverseListNode(Left2);
+        //重新拼接
+        Left1.next = Right1;
+        Left2.next = Right2;
+        return dummy.next;
+    }
+
+    public static void reverseListNode(ListNode head) {
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+    }
+
+    public static ListNode reverseKGroup(ListNode head, int k) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode prev = dummy;
+        ListNode left = head;
+        ListNode right = head;
+        while (right != null) {
+            for (int i = 0; i < k - 1; i++) {
+                right = right.next;
+                if (right == null) break;
+            }
+            if (right == null) break;
+            else {
+                ListNode next = right.next;
+                right.next = null;
+                prev.next = null;
+                reverseListNode(left);
+                prev.next = right;
+                left.next = next;
+                prev = left;
+                left = next;
+                right = next;
+            }
+        }
+        return dummy.next;
+    }
+
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode slow = dummy;
+        ListNode fast = dummy;
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        slow.next = slow.next.next;
+        return dummy.next;
+    }
+
+    public static ListNode deleteDuplicates(ListNode head) {
+        ListNode dummy = new ListNode(-1);
+        dummy.next = head;
+        ListNode slow = dummy;
+        ListNode fast = head;
+        while (fast != null) {
+            if (fast.next != null && fast.next.val == fast.val) {
+                int val = fast.val;
+                do {
+                    fast = fast.next;
+                } while (fast.next != null && fast.next.val == val);
+                slow.next = fast.next;
+                fast = fast.next;
+            } else {
+                fast = fast.next;
+                slow = slow.next;
+            }
+        }
+        return dummy.next;
+    }
+
+    public static ListNode rotateRight(ListNode head, int k) {
+        if (head == null) return null;
+        ListNode cur = head;
+        int count = 1;
+        while (cur.next != null) {
+            count++;
+            cur = cur.next;
+        }
+        k = k % count;
+        ListNode prev = head;
+        for (int i = 0; i < count - k - 1; i++) {
+            prev = prev.next;
+        }
+        cur.next = head;
+        cur = prev.next;
+        prev.next = null;
+        return cur;
     }
 }
 
