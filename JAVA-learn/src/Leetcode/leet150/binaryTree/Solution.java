@@ -5,11 +5,12 @@ import java.util.*;
 public class Solution {
     private static HashMap<Integer, Integer> map;
     private static LinkedList<TreeNode> queue;
+    private static ArrayList<Integer> list;
 
     public static void main(String[] args) {
-        int[] preorder = {3,9,20,15,7};
-        int[] inorder = {9,3,15,20,7};
-        int[] postorder = {9,15,7,20,3};
+        int[] preorder = {3, 9, 20, 15, 7};
+        int[] inorder = {9, 3, 15, 20, 7};
+        int[] postorder = {9, 15, 7, 20, 3};
         TreeNode root = buildTree(preorder, inorder);
         TreeNode root2 = buildTree2(inorder, postorder);
         System.out.println();
@@ -34,11 +35,12 @@ public class Solution {
         }
     }
 
-    public static class Node{
+    public static class Node {
         int val;
         Node left;
         Node right;
         Node next;
+
         public Node(int val) {
             this.val = val;
         }
@@ -111,17 +113,17 @@ public class Solution {
         for (int i = 0; i < n; i++) {
             map.put(inorder[i], i);
         }
-        return myBuildTree(preorder, inorder,0,n-1,0,n-1);
+        return myBuildTree(preorder, inorder, 0, n - 1, 0, n - 1);
     }
 
     public static TreeNode myBuildTree(int[] preorder, int[] inorder, int preorder_left,
                                        int preorder_right, int inorder_left, int inorder_right) {
-        if(preorder_left > preorder_right) return null;
+        if (preorder_left > preorder_right) return null;
         TreeNode root = new TreeNode(preorder[preorder_left]);
         int pos = map.get(preorder[preorder_left]);
-        int size_left = pos-inorder_left;
-        root.left = myBuildTree(preorder,inorder,preorder_left+1,preorder_left+size_left,inorder_left,pos-1);
-        root.right = myBuildTree(preorder,inorder,preorder_left+size_left+1,preorder_right,pos+1,inorder_right);
+        int size_left = pos - inorder_left;
+        root.left = myBuildTree(preorder, inorder, preorder_left + 1, preorder_left + size_left, inorder_left, pos - 1);
+        root.right = myBuildTree(preorder, inorder, preorder_left + size_left + 1, preorder_right, pos + 1, inorder_right);
         return root;
     }
 
@@ -131,32 +133,32 @@ public class Solution {
         for (int i = 0; i < inorder.length; i++) {
             map.put(inorder[i], i);
         }
-        return myBuildTree2(inorder,postorder,0,n-1,0,n-1);
+        return myBuildTree2(inorder, postorder, 0, n - 1, 0, n - 1);
     }
 
-    public static TreeNode myBuildTree2(int[] inorder, int[] postorder,int inorder_left,
-                                        int inorder_right,int postorder_left,int postorder_right) {
-        if(postorder_left > postorder_right) return null;
+    public static TreeNode myBuildTree2(int[] inorder, int[] postorder, int inorder_left,
+                                        int inorder_right, int postorder_left, int postorder_right) {
+        if (postorder_left > postorder_right) return null;
         TreeNode root = new TreeNode(postorder[postorder_right]);
         int pos = map.get(postorder[postorder_right]);
-        int size_right = inorder_right-pos;
-        root.left = myBuildTree2(inorder,postorder,inorder_left,pos-1,postorder_left,postorder_right-size_right-1);
-        root.right = myBuildTree2(inorder,postorder,pos+1,inorder_right,postorder_right-size_right,postorder_right-1);
+        int size_right = inorder_right - pos;
+        root.left = myBuildTree2(inorder, postorder, inorder_left, pos - 1, postorder_left, postorder_right - size_right - 1);
+        root.right = myBuildTree2(inorder, postorder, pos + 1, inorder_right, postorder_right - size_right, postorder_right - 1);
         return root;
     }
 
     public static Node connect(Node root) {
-        if(root == null) return null;
+        if (root == null) return null;
         Node head = root;//每层的头结点
-        while(head != null) {
+        while (head != null) {
             Node dummyHead = new Node(-1);//虚拟头结点
             Node temp = dummyHead;//用于连接下一层的变量
-            for(Node cur = head; cur != null; cur = cur.next) {//遍历当前层
-                if(cur.left!=null){
+            for (Node cur = head; cur != null; cur = cur.next) {//遍历当前层
+                if (cur.left != null) {
                     temp.next = cur.left;//进行连接
                     temp = temp.next;
                 }
-                if(cur.right!=null){
+                if (cur.right != null) {
                     temp.next = cur.right;
                     temp = temp.next;
                 }
@@ -169,12 +171,11 @@ public class Solution {
     public static void flatten(TreeNode root) {
         //本质上是把左子树插入到右子树之前
         while (root != null) {
-            if(root.left == null) {
+            if (root.left == null) {
                 root = root.right;//左子树为空,无需处理
-            }
-            else {
+            } else {
                 TreeNode temp = root.left;
-                while(temp.right != null) {
+                while (temp.right != null) {
                     temp = temp.right;//左子树中最右端的结点
                 }
                 temp.right = root.right;//插入到右子树之前
@@ -183,6 +184,87 @@ public class Solution {
                 root = root.right;
             }
         }
+    }
+
+    public static boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null) return false;
+        if (root.left == null && root.right == null) return root.val == targetSum;
+        return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val);
+    }
+
+
+
+
+    //二叉树的层次遍历
+
+    public static List<Integer> rightSideView1(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        if (root == null) return list;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            for (int i = 0; i < n; i++) {
+                TreeNode node = queue.poll();
+                if (i == n - 1) list.add(node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+        }
+        return list;
+    }
+
+    public static List<Integer> rightSideView2(TreeNode root) {
+        list = new ArrayList<>();
+        if (root == null) return list;
+        dfsRightSideView(root, 0);
+        return list;
+    }
+
+    public static void dfsRightSideView(TreeNode root, int depth) {
+        //第一个找到的符合当前深度的结点就是最右边的结点
+        if (root == null) return;
+        if (list.size() == depth) list.add(root.val);
+        dfsRightSideView(root.right, depth + 1);
+        dfsRightSideView(root.left, depth + 1);
+    }
+
+    public static List<Double> averageOfLevels(TreeNode root) {
+        List<Double> list = new ArrayList<>();
+        if (root == null) return list;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            double sum = 0.0;
+            for (int i = 0; i < n; i++) {
+                TreeNode node = queue.poll();
+                sum += node.val;
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+            list.add(sum / n);
+        }
+        return list;
+    }
+
+    public static List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (root == null) return res;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            List<Integer> list = new ArrayList<>();
+            for (int i = 0; i < n; i++) {
+                TreeNode node = queue.poll();
+                list.add(node.val);
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+            res.add(list);
+        }
+        return res;
     }
 
 }
