@@ -6,14 +6,16 @@ public class Solution {
     private static HashMap<Integer, Integer> map;
     private static LinkedList<TreeNode> queue;
     private static ArrayList<Integer> list;
+    private static int max = Integer.MIN_VALUE;
+
 
     public static void main(String[] args) {
-        int[] preorder = {3, 9, 20, 15, 7};
-        int[] inorder = {9, 3, 15, 20, 7};
-        int[] postorder = {9, 15, 7, 20, 3};
+        int[] preorder = {4,9,5};
+        int[] inorder = {2,1,3};
+        int[] postorder = {2,3,1};
         TreeNode root = buildTree(preorder, inorder);
         TreeNode root2 = buildTree2(inorder, postorder);
-        System.out.println();
+        System.out.println(sumNumbers(root));
     }
 
     public static class TreeNode {
@@ -192,8 +194,60 @@ public class Solution {
         return hasPathSum(root.left, targetSum - root.val) || hasPathSum(root.right, targetSum - root.val);
     }
 
+    public static int sumNumbers(TreeNode root) {
+        return dfsSumNumbers(root,0);
+    }
 
+    public static int dfsSumNumbers(TreeNode root, int sum) {
+        if (root == null) return 0;
+        sum *= 10;
+        sum += root.val;
+        if(root.left == null&&root.right == null) return sum;
+        return dfsSumNumbers(root.left, sum) + dfsSumNumbers(root.right, sum);
+    }
 
+    public static int maxPathSum(TreeNode root) {
+        maxGain(root);
+        return max;
+    }
+
+    public static int maxGain(TreeNode root) {
+        if(root == null) return 0;
+        int leftGain = Math.max(maxGain(root.left), 0);
+        int rightGain = Math.max(maxGain(root.right), 0);
+        //只选取贡献值为正的结点
+        int pathSum = root.val + leftGain + rightGain;
+        max = Math.max(max, pathSum);
+        return root.val+Math.max(leftGain,rightGain);
+    }
+
+    static class BSTIterator {
+        private final List<Integer> list;
+        private int index = 0;
+        public BSTIterator(TreeNode root) {
+            list = new ArrayList<>();
+            inorder(root);
+        }
+
+        public int next() {
+            return list.get(index++);
+        }
+
+        public boolean hasNext() {
+            return index < list.size();
+        }
+        public void inorder(TreeNode root) {
+            if (root == null) return;
+            inorder(root.left);
+            list.add(root.val);
+            inorder(root.right);
+        }
+    }
+
+    public static int countNodes(TreeNode root) {
+        if (root == null) return 0;
+        return countNodes(root.left)+countNodes(root.right)+1;
+    }
 
     //二叉树的层次遍历
 
@@ -261,6 +315,37 @@ public class Solution {
                 list.add(node.val);
                 if (node.left != null) queue.add(node.left);
                 if (node.right != null) queue.add(node.right);
+            }
+            res.add(list);
+        }
+        return res;
+    }
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if (root == null) return new ArrayList<>();
+        List<List<Integer>> res = new ArrayList<>();
+        Deque<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        boolean right = true;
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            List<Integer> list = new ArrayList<>();
+            if(right){
+                for (int i = 0; i < n; i++) {
+                    TreeNode node = queue.pollFirst();
+                    list.add(node.val);
+                    if (node.left != null) queue.offerLast(node.left);
+                    if (node.right != null) queue.offerLast(node.right);
+                }
+                right = false;
+            }else {
+                for (int i = 0; i < n; i++) {
+                    TreeNode node = queue.pollLast();
+                    list.add(node.val);
+                    if (node.right != null) queue.offerFirst(node.right);
+                    if (node.left != null) queue.offerFirst(node.left);
+                }
+                right = true;
             }
             res.add(list);
         }

@@ -29,24 +29,34 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        ListNode head = new ListNode(1);
-        ListNode node1 = new ListNode(2);
-        ListNode node2 = new ListNode(3);
-        ListNode node3 = new ListNode(4);
-        ListNode node4 = new ListNode(5);
-        ListNode node5 = new ListNode(4);
-        ListNode node6 = new ListNode(5);
-        head.next = node1;
-        node1.next = node2;
+//        ListNode head = new ListNode(2);
+//        ListNode node1 = new ListNode(1);
+//        ListNode node2 = new ListNode(3);
+//        ListNode node3 = new ListNode(2);
+//        ListNode node4 = new ListNode(5);
+//        ListNode node5 = new ListNode(2);
+//        ListNode node6 = new ListNode(5);
+//        head.next = node1;
+//        node1.next = node2;
 //        node2.next = node3;
 //        node3.next = node4;
 //        node4.next = node5;
 //        node5.next = node6;
-        ListNode node = rotateRight(head, 4);
-        while (node != null) {
-            System.out.println(node.val);
-            node = node.next;
-        }
+//        ListNode node = partition(head,2);
+//        while (node != null) {
+//            System.out.println(node.val);
+//            node = node.next;
+//        }
+        LRUCache cache = new LRUCache(2);
+        cache.put(1, 1);
+        cache.put(2, 2);
+        System.out.println(cache.get(1));
+        cache.put(3, 3);
+        System.out.println(cache.get(2));
+        cache.put(4, 4);
+        System.out.println(cache.get(1));
+        System.out.println(cache.get(3));
+        System.out.println(cache.get(4));
     }
 
     public static boolean hasCycle(ListNode head) {
@@ -236,5 +246,102 @@ public class Solution {
         prev.next = null;
         return cur;
     }
+
+    public static ListNode partition(ListNode head, int x) {
+        ListNode dummy1 = new ListNode(0);
+        ListNode dummy2 = new ListNode(0);
+        ListNode small = dummy1;
+        ListNode large = dummy2;
+        ListNode cur = head;
+        while (cur != null) {
+            if (cur.val < x) {
+                small.next = cur;
+                cur = cur.next;
+                small = small.next;
+            }else {
+                large.next = cur;
+                cur = cur.next;
+                large = large.next;
+            }
+        }
+        small.next = dummy2.next;
+        large.next = null;
+        return dummy1.next;
+    }
+    static class LRUCache {
+        /**
+         * Your LRUCache object will be instantiated and called as such:
+         * LRUCache obj = new LRUCache(capacity);
+         * int param_1 = obj.get(key);
+         * obj.put(key,value);
+         */
+        static class Node {
+            int key;
+            int val;
+            Node next;
+            Node prev;
+            public Node(int key, int val) {
+                this.key = key;
+                this.val = val;
+            }
+        }
+        private HashMap<Integer, Node> map;//key对应的Node地址
+        private int capacity;
+        private Node dummy;
+        private Node tail;
+        private int size;
+        public LRUCache(int capacity) {
+            this.capacity = capacity;
+            this.map = new HashMap<>();
+            this.dummy = new Node(0,0);
+            this.tail = new Node(0,0);
+            dummy.next = tail;
+            tail.prev = dummy;
+            this.size = 0;
+        }
+
+        public int get(int key) {
+            if (map.containsKey(key)) {
+                update(key);
+                return map.get(key).val;
+            } else return -1;
+        }
+
+        public void put(int key, int value) {
+            if(map.containsKey(key)){
+                update(key);
+                map.get(key).val = value;
+            } else {
+                Node node = new Node(key,value);
+                node.next = dummy.next;
+                node.prev = dummy;
+                dummy.next = node;
+                node.next.prev = node;
+                map.put(key, node);
+                size++;
+                if(size > capacity) {
+                    //移除链表末尾的元素
+                    size--;
+                    Node prev = tail.prev;
+                    prev.prev.next = tail;
+                    tail.prev = prev.prev;
+                    map.remove(prev.key);
+                }
+            }
+        }
+
+        public void update(int key){
+            //将最近访问的元素放到链表的头部
+            Node node = map.get(key);
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+            node.next = dummy.next;
+            dummy.next.prev = node;
+            node.prev = dummy;
+            dummy.next = node;
+        }
+    }
+
+
 }
 
