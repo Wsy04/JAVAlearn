@@ -7,6 +7,8 @@ public class Solution {
     private static LinkedList<TreeNode> queue;
     private static ArrayList<Integer> list;
     private static int max = Integer.MIN_VALUE;
+    private static int minDiff = Integer.MAX_VALUE;
+    private static int preVal = 0;
 
 
     public static void main(String[] args) {
@@ -330,7 +332,7 @@ public class Solution {
         return res;
     }
 
-    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    public static List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         if (root == null) return new ArrayList<>();
         List<List<Integer>> res = new ArrayList<>();
         Deque<TreeNode> queue = new LinkedList<>();
@@ -359,6 +361,21 @@ public class Solution {
             res.add(list);
         }
         return res;
+    }
+
+    //二叉搜索树
+    public static int getMinimumDifference(TreeNode root) {
+        //二叉搜索树按中序遍历就可以得到有序的序列比较相邻两个之间的差值即可
+        inorderGetMinimumDifference(root);
+        return minDiff;
+    }
+
+    public static void inorderGetMinimumDifference(TreeNode root) {
+        if (root == null) return;
+        inorderGetMinimumDifference(root.left);
+        minDiff = Math.min(minDiff, root.val - preVal);
+        preVal = root.val;
+        inorderGetMinimumDifference(root.right);
     }
 
 }
