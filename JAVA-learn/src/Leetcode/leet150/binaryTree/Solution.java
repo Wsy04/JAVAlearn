@@ -249,6 +249,15 @@ public class Solution {
         return countNodes(root.left)+countNodes(root.right)+1;
     }
 
+    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root == null||root == p||root == q) return root;//root已经不能再往下或者找到p,q
+        TreeNode left = lowestCommonAncestor(root.left, p, q);//左子树中寻找p,q,都没找到会返回null
+        TreeNode right = lowestCommonAncestor(root.right, p, q);//右子树中寻找p,q,都没找到会返回null
+        if(left != null && right != null) return root;//p,q分别在左右子树中,返回当前结点
+        return left != null ? left : right;//p,q在其中一个子树中,返回该子树中的遍历结果,题目给定p,q在树中,所以不会同时为空
+    }
+
+
     //二叉树的层次遍历
 
     public static List<Integer> rightSideView1(TreeNode root) {
