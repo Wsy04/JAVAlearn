@@ -268,6 +268,7 @@ public class Solution {
         large.next = null;
         return dummy1.next;
     }
+
     static class LRUCache {
         /**
          * Your LRUCache object will be instantiated and called as such:

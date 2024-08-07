@@ -9,7 +9,10 @@ public class Solution {
     private static int max = Integer.MIN_VALUE;
     private static int minDiff = Integer.MAX_VALUE;
     private static int preVal = 0;
-
+    private static boolean valid = true;
+    private static boolean first = true;
+    private static int number;
+    private static int res;
 
     public static void main(String[] args) {
         int[] preorder = {4,9,5};
@@ -378,4 +381,40 @@ public class Solution {
         inorderGetMinimumDifference(root.right);
     }
 
+    public boolean isValidBST(TreeNode root) {
+        inorderIsValidBST(root);
+        return valid;
+    }
+
+    public static void inorderIsValidBST(TreeNode root) {
+        if (root == null) return;
+        inorderIsValidBST(root.left);
+        if(first){
+            preVal = root.val;
+            first = false;
+        } else if(root.val <= preVal){
+            valid = false;
+            return;
+        } else {
+            preVal = root.val;
+        }
+        inorderIsValidBST(root.right);
+    }
+
+    public static int kthSmallest(TreeNode root, int k) {
+        number = k;
+        inorderKthSmallest(root);
+        return res;
+    }
+
+    public static void inorderKthSmallest(TreeNode root){
+        if(root == null) return;
+        inorderKthSmallest(root.left);
+        number--;
+        if(number == 0){
+            res = root.val;
+            return;
+        }
+        inorderKthSmallest(root.right);
+    }
 }
