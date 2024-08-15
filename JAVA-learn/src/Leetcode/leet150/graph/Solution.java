@@ -4,31 +4,6 @@ import java.util.*;
 
 public class Solution {
     public static void main(String[] args) {
-        Node node1 = new Node(1);
-        Node node2 = new Node(2);
-        Node node3 = new Node(3);
-        Node node4 = new Node(4);
-        node1.neighbors.addAll(List.of(new Node[]{node2, node4}));
-        node2.neighbors.addAll(List.of(new Node[]{node1, node3}));
-        node3.neighbors.addAll(List.of(new Node[]{node2, node4}));
-        node4.neighbors.addAll(List.of(new Node[]{node1, node3}));
-        HashSet<Node> set = new HashSet<>();
-        Queue<Node> q = new LinkedList<>();
-        Node node = cloneGraph(node1);
-        q.offer(node);
-        set.add(node);
-        while (!q.isEmpty()) {
-            node = q.poll();
-            System.out.print(node.val + ":");
-            for (Node n : node.neighbors) {
-                if (!set.contains(n)) {
-                    q.offer(n);
-                    set.add(n);
-                }
-                System.out.print(n.val + " ");
-            }
-            System.out.println();
-        }
 
     }
 
@@ -55,7 +30,37 @@ public class Solution {
     private static boolean[][] visited;
     private static boolean surround;
     private static HashMap<Node, Node> hashMap;
+    private static List<List<Integer>> graph;
+    private static int[] visit;
+    private static boolean valid;
+    private static List<Integer> res;
+    private static double ans;
+    private static HashMap<String,node1> map;
 
+    public static class node1{
+        public String name;
+        public List<edge> neighbors;
+        public node1(){
+            this.name = "";
+            this.neighbors = new ArrayList<>();
+        }
+        public node1(String name){
+            this.name = name;
+            this.neighbors = new ArrayList<>();
+        }
+        public node1(String name, List<edge> neighbors) {
+            this.name = name;
+            this.neighbors = neighbors;
+        }
+    }
+    public static class edge{
+        public String name;
+        public double val;
+        public edge(String name, double val) {
+            this.name = name;
+            this.val = val;
+        }
+    }
     public static int numIslands(char[][] grid) {
         visited = new boolean[grid.length][grid[0].length];
         int count = 0;
@@ -120,11 +125,11 @@ public class Solution {
         }
     }
 
-    public static Node cloneGraph(Node node) {
-        if (node == null) return null;
+    public static Node cloneGraph(Node node1) {
+        if (node1 == null) return null;
         hashMap = new HashMap<>();
         Queue<Node> queue = new LinkedList<>();
-        queue.add(node);
+        queue.add(node1);
         while (!queue.isEmpty()) {
             Node curr = queue.poll();
             if (!hashMap.containsKey(curr))
@@ -137,6 +142,131 @@ public class Solution {
                 hashMap.get(curr).neighbors.add(hashMap.get(neighbor));
             }
         }
-        return hashMap.get(node);
+        return hashMap.get(node1);
+    }
+
+    public static boolean canFinish(int numCourses, int[][] prerequisites) {
+        valid = true;
+        visit = new int[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] prerequisite : prerequisites) {
+            graph.get(prerequisite[0]).add(prerequisite[1]);
+        }
+        for (int i = 0; i < numCourses; i++) {
+            if (visit[i] == 0) {
+                dfsCanFinish(i);
+            }
+        }
+        return valid;
+    }
+
+    public static void dfsCanFinish(int u) {
+        visit[u] = 1;
+        for (int v : graph.get(u)) {
+            if (visit[v] == 0) {
+                dfsCanFinish(v);
+                if (!valid) return;
+            } else if (visit[v] == 1) {
+                valid = false;
+                return;
+            }
+        }
+        visit[u] = 2;
+    }
+
+    public static int[] findOrder(int numCourses, int[][] prerequisites) {
+        valid = true;
+        visit = new int[numCourses];
+        res = new ArrayList<>();
+        graph = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] prerequisite : prerequisites) {
+            graph.get(prerequisite[0]).add(prerequisite[1]);
+        }
+        for (int i = 0; i < numCourses; i++) {
+            if (visit[i] == 0) {
+                dfsFind(i);
+            }
+        }
+        if (!valid) return null;
+        return res.stream().mapToInt(i -> i).toArray();
+    }
+
+    public static void dfsFind(int u) {
+        visit[u] = 1;
+        for (int v : graph.get(u)) {
+            if (visit[v] == 0) {
+                dfsFind(v);
+                if (!valid) return;
+            } else if (visit[v] == 1) {
+                valid = false;
+                return;
+            }
+        }
+        visit[u] = 2;
+        res.add(u);
+    }
+
+    private static HashMap<String,Integer> mark;
+    public static double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        double[] result = new double[queries.size()];
+        int index = 0;
+        int n = equations.size();
+        map = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            String name1 = equations.get(i).getFirst();
+            String name2 = equations.get(i).getLast();
+            node1 n1 = map.getOrDefault(name1,new node1(name1));
+            n1.neighbors.add(new edge(name2,values[i]));
+            map.put(name1,n1);
+            node1 n2 = map.getOrDefault(name2,new node1(name2));
+            n2.neighbors.add(new edge(name1,1.0/values[i]));
+            map.put(name2,n2);
+        }
+        for (List<String> query : queries) {
+            ans = 1.0;
+            mark = new HashMap<>();
+            mark.put(query.getFirst(),1);
+            mark.put(query.getLast(),1);
+            dfsCalcEquation(query.getFirst(),query.getLast());
+            if(mark.getOrDefault(query.getLast(),0)!=2){
+                ans = -1.0;
+            }
+            result[index++] = ans;
+        }
+        return result;
+    }
+
+    public static void dfsCalcEquation(String s1,String s2){
+        if(!map.containsKey(s1)||!map.containsKey(s2)) return;
+        if(s1.equals(s2)){
+            ans = 1.0;
+            mark.put(s2,2);
+            return;
+        }
+
+        node1 n1 = map.get(s1);
+        node1 n2 = map.get(s2);
+        for (edge neighbor : n1.neighbors) {
+            if(mark.getOrDefault(s2,0)==2){
+                return;
+            }
+            else if(neighbor.name.equals(n2.name)){
+                mark.put(s2,2);
+                ans*=neighbor.val;
+                return;
+            }
+            else if(mark.getOrDefault(neighbor.name,0)==0){
+                mark.put(neighbor.name,1);
+                ans*=neighbor.val;
+                dfsCalcEquation(neighbor.name,s2);
+                if(mark.getOrDefault(s2,0)!=2)
+                    ans/=neighbor.val;
+            }
+        }
     }
 }
