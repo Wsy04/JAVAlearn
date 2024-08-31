@@ -1,26 +1,16 @@
 package Leetcode.leet150.graph;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class BFS {
     public static void main(String[] args) {
-        int[][] board = {
-                {-1, -1, -1, -1, -1, -1},
-                {-1, -1, -1, -1, -1, -1},
-                {-1, -1, -1, -1, -1, -1},
-                {-1, 35, -1, -1, 13, -1},
-                {-1, -1, -1, -1, -1, -1},
-                {-1, 15, -1, -1, -1, -1}
-        };
-//        int[][] board = {{-1,-1},{-1,1}};
-        int ans = snakesAndLadders(board);
-        System.out.println(ans);
+        String s = "AAAACCCC";
+        String t = "CCCCCCCC";
+        String[] bank = {"AAAACCCA","AAACCCCA","AACCCCCA","AACCCCCC","ACCCCCCC","CCCCCCCC","AAACCCCC","AACCCCCC"};
+        System.out.println(minMutation(s, t, bank));
     }
 
     private static Queue<Integer> queue;
-    private static boolean[] visited;
 
     public static int getId(int i,int j,int n){
         int row = n - i;//实际的第row行
@@ -41,7 +31,7 @@ public class BFS {
     public static int snakesAndLadders(int[][] board) {
         Queue<int[]> queue = new LinkedList<>();
         int n = board.length;
-        visited = new boolean[n*n+1];
+        boolean[] visited = new boolean[n * n + 1];
         queue.offer(new int[]{1, 0});
         while (!queue.isEmpty()) {
             int[] cur = queue.poll();
@@ -62,6 +52,43 @@ public class BFS {
             }
         }
 
+        return -1;
+    }
+
+    public static int minMutation(String startGene, String endGene, String[] bank) {
+        if (startGene.equals(endGene)) {
+            return 0;
+        }
+        HashSet<String> set = new HashSet<>(Arrays.asList(bank));
+        HashSet<String> visited = new HashSet<>();
+        if (!set.contains(endGene)) {
+            return -1;
+        }
+        Queue<String> geneQueue = new LinkedList<>();
+        char[] gene = {'A', 'C', 'G', 'T'};
+        geneQueue.add(startGene);
+        visited.add(startGene);
+        int step = 1;
+        while (!geneQueue.isEmpty()) {
+            int size = geneQueue.size();
+            for (int i0 = 0; i0 < size; i0++) {
+                String cur = geneQueue.poll();
+                for (int i = 0; i < 8; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        if (cur.charAt(i) != gene[j]) {
+                            StringBuilder sb = new StringBuilder(cur);
+                            sb.setCharAt(i, gene[j]);
+                            if(!visited.contains(sb.toString())&&set.contains(sb.toString())){
+                                if(sb.toString().equals(endGene)) return step;
+                                visited.add(sb.toString());
+                                geneQueue.add(sb.toString());
+                            }
+                        }
+                    }
+                }
+            }
+            step++;
+        }
         return -1;
     }
 }
